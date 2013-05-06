@@ -47,7 +47,8 @@ for ( @ARGV )
 	$newName = $_;
 	eval '$newName =~ ' . $op;
 	#error message
-	die $@ if $@;S
+	die $@ if $@;
+	
 	print $_ . ' --> ' . $newName . "\n";
 	#incrementing numeric postfix
 	if ($sc == @screens[$pg-1] )
@@ -70,7 +71,6 @@ if ($input =~ m/y/i)
 		eval $op;
 		#error message
 		die $@ if $@;
-		$_ = $_ . '_' . $pg . '.' . $sc . '.png';
 		#rename unless no change
 		rename ( $was, $_ ) unless $was eq $_;
 		#incrementing numeric postfix
