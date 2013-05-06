@@ -37,6 +37,7 @@ use File::DosGlob;
 #uncomment next line to allow passing your own regex operation as the first command line arg
 # $op = shift or die "Usage: screname expr [files]\n";
 
+#get rid of \n terminator
 chomp( @ARGV = <STDIN> ) unless @ARGV;
 
 #set start page/screen
@@ -46,8 +47,7 @@ for ( @ARGV )
 	$newName = $_;
 	eval '$newName =~ ' . $op;
 	#error message
-	die $@ if $@;
-	#$newName = $pref . '_' . $pg . '.' . $sc . '.' . $1;
+	die $@ if $@;S
 	print $_ . ' --> ' . $newName . "\n";
 	#incrementing numeric postfix
 	if ($sc == @screens[$pg-1] )
@@ -58,7 +58,7 @@ for ( @ARGV )
 	$sc = $sc + 1;
 }
 #changes ok?
-print "\n" . 'Are these changes okay?  (y/n)';
+print "\n" . 'Are these changes okay? (y/n) ';
 chomp(my $input = <STDIN>);
 
 if ($input =~ m/y/i) 
