@@ -4,9 +4,13 @@
 
 #****SCRIPT CONFIG****
 #working dir, relative to script location or absolute
-$wdir = '';
+$wdir = 'C:\deSyncInvivio\ey2491s\HAQ-DI';
+if ($wdir)
+{
+	chdir($wdir) or die("Can't change to dir $wdir: $!\n");
+}
 #new file name prefix, for example 'SF-36' or 'Neuro-QOL EF'
-$pref = 'SF-36';
+$pref = 'HAQ-DI';
 #this array represents the number of screens on each page of the flow
 #ex: @screens = (2,3,1);
 #ISF36_1.png --> SF-36_1.1.png
@@ -15,7 +19,7 @@ $pref = 'SF-36';
 #ISF36_4.png --> SF-36_2.2.png
 #ISF36_5.png --> SF-36_2.3.png
 #ISF36_6.png --> SF-36_3.1.png
-@screens = (4,5,3,3,4);
+@screens = (4,3,3,5,3,2,3,3,5);
 #operation on filename
 $op = 's/^.*\.(.*)/${pref}_$pg\.$sc\.$1/';
 #****SCRIPT CONFIG****
