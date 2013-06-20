@@ -4,13 +4,17 @@
 
 #****SCRIPT CONFIG****
 #working dir, relative to script location or absolute
-$wdir = 'C:\deSyncInvivio\ey2491s\QIDS';
+$wdir = 'C:\Users\alex.jackson\Documents\TB Screens\Visit';
 if ($wdir)
 {
 	chdir($wdir) or die("Can't change to dir $wdir: $!\n");
 }
-#new file name prefix, for example 'SF-36' or 'Neuro-QOL EF'
-$pref = 'QIDS';
+#new file name prefix, default uses the next dir up
+$wdir =~ /\\([^\\]+$)/;
+$pref = $1;
+print $pref . "\n";
+#or set your own
+#$pref = "";
 #this array represents the number of screens on each page of the flow
 #ex: @screens = (2,3,1);
 #ISF36_1.png --> SF-36_1.1.png
@@ -19,7 +23,7 @@ $pref = 'QIDS';
 #ISF36_4.png --> SF-36_2.2.png
 #ISF36_5.png --> SF-36_2.3.png
 #ISF36_6.png --> SF-36_3.1.png
-@screens = (5,3,4,5);
+@screens = ();
 #operation on filename
 $op = 's/^.*\.(.*)/${pref}_$pg\.$sc\.$1/';
 #****SCRIPT CONFIG****
@@ -48,7 +52,7 @@ chomp( @ARGV = <STDIN> ) unless @ARGV;
 for ( @ARGV ) 
 {
 	$old = $_;
-	s/(_\d\.)/a$1/;
+	s/(.+)(_\d\.)/a$1$2/;
 	#error message
 	die $@ if $@;
 	#rename unless no change
