@@ -41,7 +41,7 @@ $epro = &_slurp (@ARGV);
 #move iso codes into memory for scans
 $iso = &_slurp ("$Bin/ISO Country and Language Codes.csv");
 #prepare the output file
-my $version = &scan (qr/Version>(.*)<\/Version>/i);
+(my $version) = $epro =~ /Version>(.*)<\/Version>/i;
 chomp ($version);
 my $outfile = $version . "_VaildationSummary.csv";
 open (my $fh, '>', $outfile);
@@ -61,13 +61,12 @@ my $workSuffix = ".xml.epsctmp";
 print $fh "ePSC version,$version\n";
 #		2	Output ISP login and password
 print $fh "ISP Login,";
-print $fh my $login = &scan (qr/Account.*name="(.*)"\spas/i);
+print $fh (my $login) = $epro =~ /Account.*name="(.*)"\spas/i,"\n";
 
 print $fh "ISP Password,";
-print $fh my $pass = &scan (qr/"\spassword="(.*)"/i);
+print $fh (my $pass) = $epro =~ /"\spassword="(.*)"/,"\n";
 
 #		3	Verify ISP password is login backwards
-#$string = reverse $string;
 print $fh "ISP pass is login backwards,";
 #remove domain from login and compare
 chomp($pass);
@@ -131,7 +130,6 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 			chomp (@sver[$order]);
 			@sver[$order] =~ s/#V\s//;
 		}
-		else {@sver[$order] = "File Not Found!";}
 	}
 	if (length $5)
 	{
@@ -176,13 +174,6 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 close $fh;
 unlink glob "\*$workSuffix";
 exec($outfile);
-
-#sub to scan the command arg file and return 1st matched substr
-sub scan 
-{
-	my $reg = shift;
-	if ($epro =~ $reg) { return $1 . "\n"; last;}
-}
 
 #reads file into memory
 sub _slurp
