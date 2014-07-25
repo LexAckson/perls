@@ -20,8 +20,7 @@
 # questions for ben
 # 1. always a study, always a display name, always lang-id, script name?
 # r1. study is not always there, disp not, lang and script name always there
-# 2. example of bitmap
-# 3. example of image map
+# 2. should a missing script file be called out?
 
 use File::ReadBackwards;
 
@@ -72,8 +71,9 @@ print $fh my $pass = &scan (qr/"\spassword="(.*)"/i);
 print $fh "ISP pass is login backwards,";
 #remove domain from login and compare
 chomp($pass);
-scalar reverse $pass;
-if ($login =~ /^$pass$/) {print $fh "True\n";}
+$login =~ s/@.*$//;
+chomp($login);
+if ($login eq scalar reverse $pass) {print $fh "True\n";}
 else {print $fh "False\n";}
 
 #		4	For each study list the name and display if applicable
@@ -85,10 +85,10 @@ print $fh "\nStudies:\n\n";
 #
 
 #grabbing stuff into arrays, a </study> resets the counter
-#consider moving the prints outside because the order of nodes can change
 $order = 0;
 my @lid;
 my @sname;
+my @sver;
 my @dname;
 my @bmap;
 my @imap;
@@ -119,43 +119,55 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 			$n++;
 		}
 	}
-#		10	Output script name
-	if (length $4)
+	if (length $4)# script name and version
 	{
 		@sname[$order] = $4;
-		print $fh ",$4";
-#		11	Output version of the script
-		my $sfh = File::ReadBackwards->new(@sname[$order] . $workSuffix);
-		$sfh->readline; #blow out the last line
-		my $sver = $sfh->readline;
-		$sfh->close;
-		chomp ($sver);
-		$sver =~ s/#V\s//;
-		print $fh "," . $sver;
+#		TODO make this fail in a safe way/error, also allow for non-existant script files
+		if (my $sfh = File::ReadBackwards->new(@sname[$order] . $workSuffix))
+		{
+			$sfh->readline; #blow out the last line
+			@sver[$order] = $sfh->readline;
+			$sfh->close;
+			chomp (@sver[$order]);
+			@sver[$order] =~ s/#V\s//;
+		}
+		else {@sver[$order] = "File Not Found!";}
 	}
-#		5	Output display name
 	if (length $5)
 	{
 		@dname[$order] = $5;
-		print $fh ",$5";
+		my $error;
 #		6	Verify format and spelling for display name (country - lang)
 		my ($country, $lang) = @dname[$order] =~ /(.*)\s-\s(.*)/;
-		if ($iso !~ /$country/ or $iso !~ /$lang/) {print $fh "BAD SP/FMT!!!";}
+		if ($iso !~ /$country/ or $iso !~ /$lang/) {$error . "BAD SP/FMT!!!";}
 #		7	Verify order of display name (alpha)
-		if ($order >= 1 && @dname[$order] le @dname[$order - 1]){print $fh "OUT OF ORDER!!!";}
+		if ($order >= 1 && @dname[$order] le @dname[$order - 1]){$error . "OUT OF ORDER!!!";}
 #		8	Verify language ID matches the display name
 		my ($lg, $ct) = @lid[$order] =~ /(\w\w)-(\w\w)/;
-		if ($iso !~ /$ct,$country/ or $iso !~ /$lg,$lang/) {print $fh "LID MISMATCH!!!";}
+		if ($iso !~ /$ct,$country/ or $iso !~ /$lg,$lang/) {$error . "LID MISMATCH!!!";}
+		@dname[$order] . $error;
 	}
+	if (length $6){@bmap[$order] = $6;} #bitmap
+	if (length $7){@imap[$order] = $7;}
+	if (length $8)#end of language, print all lang nodes
+	{
+#		10	Output script name
+		print $fh ",@sname[$order]";
+#		11	Output version of the script
+		print $fh ",@sver[$order]";
+#		5	Output display name
+		print $fh ",@dname[$order]";
 #		12	Output bitmap if applicable
-	if (length $6){@bmap[$order] = $6; print $fh ",$6";}
+		print $fh ",@bmap[$order]";
 #		13	Output image map if applicable
-	if (length $7){@imap[$order] = $7; print $fh ",$7";}
-	if (length $8){print $fh "\n"; $order++;}#end of language
+		print $fh ",@imap[$order]";
+		print $fh "\n";
+		$order++;
+	}
 	if (length $9) #end of study
 	{
 		$order = 0;
-		(@lid,@sname,@dname,@bmap,@imap) = ();
+		(@lid,@sname,@sver,@dname,@bmap,@imap) = ();
 		print $fh "\n";
 	}
 }
