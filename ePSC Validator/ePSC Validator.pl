@@ -15,12 +15,15 @@
 #		11	Output version of the script
 #		12	Output bitmap if applicable
 #		13	Output image map if applicable
+#		14	make sure the bitmap file is present
+#		15	no bitmaps files are in the package without listing in epsc
+#		16	make sure every image map file listed is present
 
 #bonus TODO
 # questions for ben
 # 1. always a study, always a display name, always lang-id, script name?
 # r1. study is not always there, disp not, lang and script name always there
-# 2. should a missing script file be called out?
+# 2. should a missing script file be called out? No
 
 use File::ReadBackwards;
 
@@ -91,6 +94,7 @@ my @sver;
 my @dname;
 my @bmap;
 my @imap;
+my $error;
 while ($epro =~ /<Study\sname="(.*?)"						#1	study
 				|displayname="(.*?)"						#2	display
 				|<Language\sid="(.{5})						#3	@lid
@@ -105,7 +109,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 {
 	if (length $1){print $fh "Study,Display Name\n$1";}
 	if (length $2){print $fh ",$2";}
-	if (length $10){print $fh "\nLanguages:\nLang ID,Script Name,Script Version,Display Name,Bitmap,Image Map\n";}
+	if (length $10){print $fh "\nLanguages:\nLang ID,Script Name,Script Version,Display Name,Bitmap,Image Map,Errors\n";}
 	if (length $3)
 	{
 		@lid[$order] = $3;
@@ -114,14 +118,13 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 		my $n = 0;
 		while ($n < $order)
 		{
-			if (@lid[$order] eq @lid[$n]) {print $fh "REPEAT!!!";}
+			if (@lid[$order] eq @lid[$n]) {$error = $error . "REPEAT!!!";}
 			$n++;
 		}
 	}
 	if (length $4)# script name and version
 	{
 		@sname[$order] = $4;
-#		TODO make this fail in a safe way/error, also allow for non-existant script files
 		if (my $sfh = File::ReadBackwards->new(@sname[$order] . $workSuffix))
 		{
 			$sfh->readline; #blow out the last line
@@ -134,19 +137,32 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 	if (length $5)
 	{
 		@dname[$order] = $5;
-		my $error;
 #		6	Verify format and spelling for display name (country - lang)
 		my ($country, $lang) = @dname[$order] =~ /(.*)\s-\s(.*)/;
-		if ($iso !~ /$country/ or $iso !~ /$lang/) {$error . "BAD SP/FMT!!!";}
+		if ($iso !~ /$country/ or $iso !~ /$lang/)
+		{$error = $error . "BAD SP/FMT!!!";}
 #		7	Verify order of display name (alpha)
-		if ($order >= 1 && @dname[$order] le @dname[$order - 1]){$error . "OUT OF ORDER!!!";}
+		if ($order >= 1 && @dname[$order] le @dname[$order - 1])
+		{$error = $error . "OUT OF ORDER!!!";}
 #		8	Verify language ID matches the display name
 		my ($lg, $ct) = @lid[$order] =~ /(\w\w)-(\w\w)/;
-		if ($iso !~ /$ct,$country/ or $iso !~ /$lg,$lang/) {$error . "LID MISMATCH!!!";}
-		@dname[$order] . $error;
+		if ($iso !~ /$ct,$country/ or $iso !~ /$lg,$lang/)
+		{$error = $error . "LID MISMATCH!!!";}
 	}
-	if (length $6){@bmap[$order] = $6;} #bitmap
-	if (length $7){@imap[$order] = $7;}
+	if (length $6) #bitmap
+	{
+		@bmap[$order] = $6;
+#		14	make sure the bitmap file is present
+		unless(-e "@bmap[$order].sdf")
+		{$error = $error . "BitMap not Found!!!";}
+	}
+	if (length $7)
+	{
+		@imap[$order] = $7;
+#		15	make sure every image map file listed is present
+		unless (-e "@imap[$order].xml")
+		{$error = $error . "Image Map not Found!!!";}
+	}
 	if (length $8)#end of language, print all lang nodes
 	{
 #		10	Output script name
@@ -157,9 +173,19 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 		print $fh ",@dname[$order]";
 #		12	Output bitmap if applicable
 		print $fh ",@bmap[$order]";
+#		15	no bitmaps files are in the package without listing in epsc
+		unless(length @bmap[$order])
+		{
+			foreach (glob("*.sdf"))
+			{
+				if(/@sname[$order]/){$error = $error . "BitMap not Listed!!!";}
+			};
+		}
 #		13	Output image map if applicable
 		print $fh ",@imap[$order]";
+		print $fh ",$error";
 		print $fh "\n";
+		$error = "";
 		$order++;
 	}
 	if (length $9) #end of study
