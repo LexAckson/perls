@@ -61,26 +61,26 @@ system($path, $work);
 my $workSuffix = ".xml.epsctmp";
 
 #		1	Output ePSC version
-print $fh "ePSC version,$version\n";
+print $fh $version ? "Version,$version\n" : "Version Not Found\n";
 #		2	Output ISP login and password
-print $fh "ISP Login,";
-print $fh (my $login) = $epro =~ /Account.*name="(.*)"\spas/i,"\n";
+print $fh "Account Login,";
+(my $login) = $epro =~ /Account.*name="(.*)"\spas/i,"\n";
+print $fh $login ? "$login\n" : "Account Name Not Found\n";
 
-print $fh "ISP Password,";
-print $fh (my $pass) = $epro =~ /"\spassword="(.*)"/,"\n";
+print $fh "Account Password,";
+(my $pass) = $epro =~ /"\spassword="(.*)"/;
+print $fh $pass ? "$pass\n" : "Account Password Not Found\n";
 
 #		3	Verify ISP password is login backwards
-print $fh "ISP pass is login backwards,";
 #remove domain from login and compare
 chomp($pass);
 $login =~ s/@.*$//;
 chomp($login);
-if ($login eq scalar reverse $pass) {print $fh "True\n";}
-else {print $fh "False\n";}
+unless ($login eq scalar reverse $pass){print $fh ",Password Mismatch!!!";}
+print $fh "\n\n";
 
 #		4	For each study list the name and display if applicable
 # to grab all the things @ary = $str =~ m/(stuff)/g;
-print $fh "\nStudies:\n\n";
 
 #
 #		--	For each language:
@@ -107,22 +107,21 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 				|(<SupportedLanguages>)						#10	start langs list
 				/xgi)
 {
-	if (length $1){print $fh "Study,Display Name\n$1";}
-	if (length $2){print $fh ",$2";}
-	if (length $10){print $fh "\nLanguages:\nLang ID,Script Name,Script Version,Display Name,Bitmap,Image Map,Errors\n";}
-	if (length $3)
+	if ($1){print $fh "Study Name,$1\n";}
+	if ($2){print $fh "Display Name,$2";}
+	if ($10){print $fh "\n[[Study Languages]]\nDisplay Name,Language ID,Script Name,Script Version,Script Image,Image Map,Warning(s)\n";}
+	if ($3)
 	{
 		@lid[$order] = $3;
-		print $fh "$3";
 #		9	Verify no language ID is repeated per study
 		my $n = 0;
 		while ($n < $order)
 		{
-			if (@lid[$order] eq @lid[$n]) {$error = $error . "REPEAT!!!";}
+			if (@lid[$order] eq @lid[$n]) {$error = $error . "Language ID Repeated-";}
 			$n++;
 		}
 	}
-	if (length $4)# script name and version
+	if ($4)# script name and version
 	{
 		@sname[$order] = $4;
 		if (my $sfh = File::ReadBackwards->new(@sname[$order] . $workSuffix))
@@ -134,61 +133,65 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 			@sver[$order] =~ s/#V\s//;
 		}
 	}
-	if (length $5)
+	if ($5)
 	{
 		@dname[$order] = $5;
 #		6	Verify format and spelling for display name (country - lang)
 		my ($country, $lang) = @dname[$order] =~ /(.*)\s-\s(.*)/;
 		if ($iso !~ /$country/ or $iso !~ /$lang/)
-		{$error = $error . "BAD SP/FMT!!!";}
+		{$error = $error . "DisplayName Spelling-";}
 #		7	Verify order of display name (alpha)
 		if ($order >= 1 && @dname[$order] le @dname[$order - 1])
-		{$error = $error . "OUT OF ORDER!!!";}
+		{$error = $error . "DisplayName Out of Order-";}
 #		8	Verify language ID matches the display name
 		my ($lg, $ct) = @lid[$order] =~ /(\w\w)-(\w\w)/;
 		if ($iso !~ /$ct,$country/ or $iso !~ /$lg,$lang/)
-		{$error = $error . "LID MISMATCH!!!";}
+		{$error = $error . "Language ID Invalid-";}
 	}
-	if (length $6) #bitmap
+	if ($6) #bitmap
 	{
 		@bmap[$order] = $6;
 #		14	make sure the bitmap file is present
 		unless(-e "@bmap[$order].sdf")
-		{$error = $error . "BitMap not Found!!!";}
+		{$error = $error . "Script Image Error-";}
 	}
-	if (length $7)
+	if ($7)
 	{
 		@imap[$order] = $7;
 #		15	make sure every image map file listed is present
 		unless (-e "@imap[$order].xml")
-		{$error = $error . "Image Map not Found!!!";}
+		{$error = $error . "Missing Image Map-";}
 	}
-	if (length $8)#end of language, print all lang nodes
+	if ($8)#end of language, print all lang nodes
 	{
-#		10	Output script name
-		print $fh ",@sname[$order]";
-#		11	Output version of the script
-		print $fh ",@sver[$order]";
-#		5	Output display name
-		print $fh ",@dname[$order]";
-#		12	Output bitmap if applicable
-		print $fh ",@bmap[$order]";
 #		15	no bitmaps files are in the package without listing in epsc
 		unless(length @bmap[$order])
 		{
 			foreach (glob("*.sdf"))
 			{
-				if(/@sname[$order]/){$error = $error . "BitMap not Listed!!!";}
+				if(/@sname[$order]/){$error = $error . "Script Image Error-";}
 			};
 		}
+#			Printing!
+#		5	Output display name
+		print $fh @dname[$order] ? "@dname[$order]" : ",None";
+#			output language id
+		print $fh @lid[$order] ? ",@lid[$order]" : ",None";
+#		10	Output script name
+		print $fh @sname[$order] ? ",@sname[$order]" : ",None";
+#		11	Output version of the script
+		print $fh @sver[$order] ? ",@sver[$order]" : ",None";
+#		12	Output bitmap if applicable
+		print $fh @bmap[$order] ? ",@bmap[$order]" : ",None";
 #		13	Output image map if applicable
-		print $fh ",@imap[$order]";
-		print $fh ",$error";
+		print $fh @imap[$order] ? ",@imap[$order]" : ",None";
+#			Output warning messages
+		print $fh $error ? ",$error" : ",None";
 		print $fh "\n";
 		$error = "";
 		$order++;
 	}
-	if (length $9) #end of study
+	if ($9) #end of study
 	{
 		$order = 0;
 		(@lid,@sname,@sver,@dname,@bmap,@imap) = ();
