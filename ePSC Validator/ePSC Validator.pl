@@ -53,15 +53,16 @@ open (my $fh, '>', $outfile);
 my $work = $ARGV[0];
 $work =~ s/ePROStudyConfig.xml//i;
 $work =~ s/\\/\\\\/g;
-my $path = $Bin . "\\\\cryptonite\\\\myDecryptDecompAll.bat";
-$path =~ s/\//\\\\/g;
+my $path = $Bin . "\\cryptonite\\myDecryptDecompAll.bat";
+$path =~ s/\//\\/g;
 #call the cryptonite batch decomp decrypt
-system($path, $work);
+system( $path, $work );
 #the decrypted files should have this extension
 my $workSuffix = ".xml.epsctmp";
 
 #		1	Output ePSC version
 print $fh $version ? "Version,$version\n" : "Version Not Found\n";
+
 #		2	Output ISP login and password
 print $fh "Account Login,";
 (my $login) = $epro =~ /Account.*name="(.*)"\spas/i,"\n";
@@ -117,7 +118,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 		my $n = 0;
 		while ($n < $order)
 		{
-			if (@lid[$order] eq @lid[$n]) {$error = $error . "Language ID Repeated-";}
+			if (@lid[$order] eq @lid[$n]) {$error = $error . "Language ID Repeated - ";}
 			$n++;
 		}
 	}
@@ -131,7 +132,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 			$sfh->close;
 			chomp (@sver[$order]);
 			@sver[$order] =~ s/#V\s//;
-		}
+		} else { print "Error Reading Version from file."; system( 'pause' );}
 	}
 	if ($5)
 	{
@@ -139,28 +140,28 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 #		6	Verify format and spelling for display name (country - lang)
 		my ($country, $lang) = @dname[$order] =~ /(.*)\s-\s(.*)/;
 		if ($iso !~ /$country/ or $iso !~ /$lang/)
-		{$error = $error . "DisplayName Spelling-";}
+		{$error = $error . "DisplayName Spelling - ";}
 #		7	Verify order of display name (alpha)
 		if ($order >= 1 && @dname[$order] le @dname[$order - 1])
-		{$error = $error . "DisplayName Out of Order-";}
+		{$error = $error . "DisplayName Out of Order - ";}
 #		8	Verify language ID matches the display name
 		my ($lg, $ct) = @lid[$order] =~ /(\w\w)-(\w\w)/;
 		if ($iso !~ /$ct,$country/ or $iso !~ /$lg,$lang/)
-		{$error = $error . "Language ID Invalid-";}
+		{$error = $error . "Language ID Invalid - ";}
 	}
 	if ($6) #bitmap
 	{
 		@bmap[$order] = $6;
 #		14	make sure the bitmap file is present
 		unless(-e "@bmap[$order].sdf")
-		{$error = $error . "Script Image Error-";}
+		{$error = $error . "Script Image Error - ";}
 	}
 	if ($7)
 	{
 		@imap[$order] = $7;
 #		15	make sure every image map file listed is present
 		unless (-e "@imap[$order].xml")
-		{$error = $error . "Missing Image Map-";}
+		{$error = $error . "Missing Image Map - ";}
 	}
 	if ($8)#end of language, print all lang nodes
 	{
@@ -169,7 +170,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 		{
 			foreach (glob("*.sdf"))
 			{
-				if(/@sname[$order]/){$error = $error . "Script Image Error-";}
+				if(/@sname[$order]/){$error = $error . "Script Image Error - ";}
 			};
 		}
 #			Printing!
@@ -198,9 +199,9 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 		print $fh "\n";
 	}
 }
-
 #cleanup
 close $fh;
+#commented out to test if cryptonite is working
 unlink glob "\*$workSuffix";
 exec($outfile);
 

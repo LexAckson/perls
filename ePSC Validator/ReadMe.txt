@@ -15,6 +15,9 @@
 #		11	Output version of the script
 #		12	Output bitmap if applicable
 #		13	Output image map if applicable
+#		14	make sure the bitmap file is present
+#		15	no bitmaps files are in the package without listing in epsc
+#		16	make sure every image map file listed is present
 
 
 Install:
@@ -28,5 +31,8 @@ Ex.
 @="\"C:\\Users\\alex.jackson\\Documents\\perls\\ePSCValidator.exe\" \"%1\""
 
 Then double click on 'context menu shortcut.reg' to install the shortcut.
+
+Copy the libwinpthread-1.dll into your C:\windows\system32 folder.  This is a 
+temporary step in place until I reinstall my perl to remove this dependency.
 
 All done!
