@@ -1,19 +1,21 @@
-#a script to rename and number assesment screens according to 
-#the numbering from flow chats
+#a script to rename files with regex
+#has a numbering system option (@screens, $pg, $sc)for flowchart screenshots
 #USAGE: perl screname files  ex: perl screname *.png  or  perl screname ISF_*
 
 #****SCRIPT CONFIG****
+#set the working dir($wdir), prefix($pref) and regex operation ($op)
 #working dir, relative to script location or absolute
-$wdir = 'C:\Users\alex.jackson\Documents\TB Screens\Visit';
+$wdir = 'C:\working\Software\5.1xProduct\Device Configurations\MCP 5.1 (IA0080)\Configuration Source\EXPERT Branch\Translations\10108.43.01E\MCP Bitmap Translation SDF files (IA0088.Q02_Prov63)\Subject';
 if ($wdir)
 {
 	chdir($wdir) or die("Can't change to dir $wdir: $!\n");
 }
 #new file name prefix, default uses the next dir up
-$wdir =~ /\\([^\\]+$)/;
-$pref = $1;
-print $pref . "\n";
+#$wdir =~ /\\([^\\]+$)/;
+#$pref = $1;
+#print $pref . "\n";
 #or set your own
+$pref = "IA0088_DiaryPRO_10123_Subject_";
 #$pref = "";
 #this array represents the number of screens on each page of the flow
 #ex: @screens = (2,3,1);
@@ -25,7 +27,8 @@ print $pref . "\n";
 #ISF36_6.png --> SF-36_3.1.png
 @screens = ();
 #operation on filename
-$op = 's/^.*\.(.*)/${pref}_$pg\.$sc\.$1/';
+#$op = 's/^.*\.(.*)/${pref}_$pg\.$sc\.$1/';
+$op = 's/10123_(....).*/10123_Subject_$1.sdf/';
 #****SCRIPT CONFIG****
 
 #has the user accepted the changes?
