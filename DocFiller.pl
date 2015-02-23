@@ -8,7 +8,7 @@ $docpath = 'C:\working\Software\_SitePRO Tablet Product\Configurations\AA3074\Co
 my $zip = Archive::Zip->new();
 #read doc
 $zip->read($docpath) == AZ_OK or die "read error\n";
-#get xml file handle and contents
+#get xml file handle and contents TODO figure out why item number changes every time...
 my $xmlhandle = $zip->memberNamed('customXml/item4.xml');
 my $xmlcontents = $xmlhandle->contents();
 #make replacements
