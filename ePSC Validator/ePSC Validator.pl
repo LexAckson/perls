@@ -19,11 +19,17 @@
 #		15	no bitmaps files are in the package without listing in epsc
 #		16	make sure every image map file listed is present
 
-#bonus TODO
-# questions for ben
-# 1. always a study, always a display name, always lang-id, script name?
-# r1. study is not always there, disp not, lang and script name always there
-# 2. should a missing script file be called out? No
+#packaging notes
+#
+#To install PP with strawberry perl, use the cpan manager to install PAR
+#then use these commands:
+#cpan> look PAR::Packer
+#H:\straw5.16\cpan\build\PAR-Packer-1.014-lqy0Qe>perl Makefile.PL
+#dmake -f Makefile install
+#******************************
+#The command for pp isindex
+#
+
 
 use File::ReadBackwards;
 
@@ -127,11 +133,13 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 		@sname[$order] = $4;
 		if (my $sfh = File::ReadBackwards->new(@sname[$order] . $workSuffix))
 		{
-			$sfh->readline; #blow out the last line
-			@sver[$order] = $sfh->readline;
-			$sfh->close;
+			until (@sver[$order] =~ /^#V\s/ )
+			{
+				@sver[$order] = $sfh->readline;
+			}
 			chomp (@sver[$order]);
 			@sver[$order] =~ s/#V\s//;
+			$sfh->close;
 		} else { print "Error Reading Version from file."; system( 'pause' );}
 	}
 	if ($5)

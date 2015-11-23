@@ -119,6 +119,8 @@ Country,KM,Comoros
 Country,KN,Saint Kitts and Nevis
 Country,KP,"Korea, Democratic People's Republic of"
 Country,KR,"Korea, Republic of"
+Country,KR,South Korea
+Country,KR,Korea Republic
 Country,KW,Kuwait
 Country,KY,Cayman Islands
 Country,KZ,Kazakhstan
@@ -135,11 +137,11 @@ Country,LV,Latvia
 Country,LY,Libyan Arab Jamahiriya
 Country,MA,Morocco
 Country,MC,Monaco
-Country,MD,"Moldova, Republic of"
+Country,MD,Moldova
 Country,ME,Montenegro
 Country,MG,Madagascar
 Country,MH,Marshall Islands
-Country,MK,"Macedonia, the former Yugoslav Republic of"
+Country,MK,Macedonia
 Country,ML,Mali
 Country,MM,Myanmar
 Country,MN,Mongolia
@@ -221,7 +223,7 @@ Country,TO,Tonga
 Country,TR,Turkey
 Country,TT,Trinidad and Tobago
 Country,TV,Tuvalu
-Country,TW,"Taiwan, Province of China"
+Country,TW,Taiwan
 Country,TZ,"Tanzania, United Republic of"
 Country,UA,Ukraine
 Country,UG,Uganda
@@ -234,7 +236,7 @@ Country,VC,Saint Vincent and the Grenadines
 Country,VE,Venezuela
 Country,VG,"Virgin Islands, British"
 Country,VI,"Virgin Islands, U.S."
-Country,VN,Viet Nam
+Country,VN,Vietnam
 Country,VU,Vanuatu
 Country,WF,Wallis and Futuna
 Country,WS,Samoa
@@ -346,7 +348,7 @@ Translation,lv,Latvian
 Translation,mg,Malagasy
 Translation,mh,Marshallese
 Translation,mi,M?ori
-Translation,mk /sl ?ÿ,Macedonian
+Translation,mk,Macedonian
 Translation,ml,Malayalam
 Translation,mn,Mongolian
 Translation,mo,Moldavian
@@ -370,7 +372,7 @@ Translation,oj,Ojibwa
 Translation,om,Oromo
 Translation,or,Oriya
 Translation,os,Ossetian
-Translation,pa,Panjabi
+Translation,pa,Punjabi
 Translation,pi,P?li
 Translation,pl,Polish
 Translation,ps,Pashto
@@ -397,6 +399,7 @@ Translation,sq,Albanian
 Translation,sr,Serbian
 Translation,ss,Swati
 Translation,st,Southern Sotho
+Translation,st,Sesotho
 Translation,su,Sundanese
 Translation,sv,Swedish
 Translation,sw,Swahili
