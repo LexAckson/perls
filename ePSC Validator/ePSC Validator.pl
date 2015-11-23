@@ -28,7 +28,7 @@
 #dmake -f Makefile install
 #******************************
 #The command for pp isindex
-#
+#C:\Users\alex.jackson\Documents\perls\ePSC Validator>pp -o ePSCValidator.exe -M File::ReadBackwards "ePSC Validator.pl"
 
 
 use File::ReadBackwards;
@@ -140,7 +140,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 			chomp (@sver[$order]);
 			@sver[$order] =~ s/#V\s//;
 			$sfh->close;
-		} else { print "Error Reading Version from file."; system( 'pause' );}
+		} else { print "Error Reading Version from file. " . @sname[$order] . "\n"; system( 'pause' );}
 	}
 	if ($5)
 	{
