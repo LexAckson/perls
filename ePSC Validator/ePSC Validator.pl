@@ -140,7 +140,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 			chomp (@sver[$order]);
 			@sver[$order] =~ s/#V\s//;
 			$sfh->close;
-		} else { print "Error Reading Version from file. " . @sname[$order] . "\n"; system( 'pause' );}
+		} else { print "Error Reading Version from file. " . @sname[$order] . "\n";}
 	}
 	if ($5)
 	{
