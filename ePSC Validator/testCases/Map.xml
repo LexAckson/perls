@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<PackageProfile>
+  <settings>
+    <add key="CoreVersion" value="None"/>
+    <add key="ConfigDBVersion" value="None"/>
+    <add key="ResearcherDBVersion" value="None"/>
+  </settings>
+</PackageProfile>
+

@@ -27,7 +27,7 @@ double backslashes, replacing the &&&install dir with double \\&&&.
 
 Ex.
 
-@="\"&&&install dir with double \\&&&\" \"%1\""
+@="\"&&&path to ePSCValidator.exe with double backslashes&&&\" \"%1\""
 @="\"C:\\Users\\alex.jackson\\Documents\\perls\\ePSCValidator.exe\" \"%1\""
 
 Then double click on 'context menu shortcut.reg' to install the shortcut.

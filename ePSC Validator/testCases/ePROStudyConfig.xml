@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Settings>
+  <Version>SITEPRO.ElitePad</Version>
+  <!-- Device: name, display width and height in portrait orientation, content/screen width and height in portrait orientation.-->
+  <Device name="ELITEPAD1000" width="800" height="1310" contentwidth="800" contentheight="1195"/>
+  <TextStyles>
+    <Style id="en">
+      <FontName>Arial Unicode MS</FontName>
+      <FontSizeTiny>16</FontSizeTiny>
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium>
+      <FontSizeBig>32</FontSizeBig>
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="ar">
+      <FontName>Tahoma</FontName> 
+      <FontSizeTiny>16</FontSizeTiny> 
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium> 
+      <FontSizeBig>32</FontSizeBig> 
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="hy">
+      <FontName>Sylfaen</FontName> 
+      <FontSizeTiny>16</FontSizeTiny> 
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium> 
+      <FontSizeBig>32</FontSizeBig> 
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="bn">
+      <FontName>Vrinda</FontName> 
+      <FontSizeTiny>16</FontSizeTiny> 
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium> 
+      <FontSizeBig>32</FontSizeBig> 
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="zh">
+      <FontName>SimSun</FontName> 
+      <FontSizeTiny>16</FontSizeTiny> 
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium> 
+      <FontSizeBig>32</FontSizeBig> 
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="ka">
+      <FontName>Sylfaen</FontName> 
+      <FontSizeTiny>16</FontSizeTiny> 
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium> 
+      <FontSizeBig>32</FontSizeBig> 
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="gu">
+      <FontName>Shruti</FontName>
+      <FontSizeTiny>16</FontSizeTiny>
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium>
+      <FontSizeBig>32</FontSizeBig>
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="he">
+      <FontName>Tahoma</FontName>
+      <FontSizeTiny>16</FontSizeTiny>
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium>
+      <FontSizeBig>32</FontSizeBig>
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="hi">
+      <FontName>Mangal</FontName>
+      <FontSizeTiny>16</FontSizeTiny>
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium>
+      <FontSizeBig>32</FontSizeBig>
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="ja">
+      <FontName>MS Gothic</FontName>
+      <FontSizeTiny>16</FontSizeTiny>
+      <FontSizeSmall>20</FontSizeSmall>
+      <FontSizeMedium>26</FontSizeMedium>
+      <FontSizeBig>32</FontSizeBig>
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="kn">
+      <FontName>Tunga</FontName>
+      <FontSizeTiny>16</FontSizeTiny>
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium>
+      <FontSizeBig>32</FontSizeBig>
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="ko">
+      <FontName>Gulim</FontName>
+      <FontSizeTiny>16</FontSizeTiny>
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium>
+      <FontSizeBig>32</FontSizeBig>
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="ml">
+      <FontName>Kartika</FontName> 
+      <FontSizeTiny>16</FontSizeTiny> 
+      <FontSizeSmall>22</FontSizeSmall>
+      <FontSizeMedium>28</FontSizeMedium> 
+      <FontSizeBig>32</FontSizeBig> 
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="mr">
+      <FontName>Mangal</FontName> 
+      <FontSizeTiny>16</FontSizeTiny> 
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium> 
+      <FontSizeBig>32</FontSizeBig> 
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="pa">
+      <FontName>Raavi</FontName>
+      <FontSizeTiny>16</FontSizeTiny>
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium>
+      <FontSizeBig>32</FontSizeBig>
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="si">
+      <FontName>Iskoola Pota</FontName>
+      <FontSizeTiny>16</FontSizeTiny>
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium>
+      <FontSizeBig>32</FontSizeBig>
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="ta">
+      <FontName>Latha</FontName>
+      <FontSizeTiny>16</FontSizeTiny>
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium>
+      <FontSizeBig>32</FontSizeBig>
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="te">
+      <FontName>Gautami</FontName>
+      <FontSizeTiny>16</FontSizeTiny>
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium>
+      <FontSizeBig>32</FontSizeBig>
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+    <Style id="ur">
+      <FontName>Tahoma</FontName>
+      <FontSizeTiny>16</FontSizeTiny>
+      <FontSizeSmall>18</FontSizeSmall>
+      <FontSizeMedium>22</FontSizeMedium>
+      <FontSizeBig>32</FontSizeBig>
+      <FontSizeGigantic>40</FontSizeGigantic>
+    </Style>
+  </TextStyles>
+  <DataTransfer>
+    <Ethernet/>
+    <DialUp>
+      <Account device="MultiMobile USB Modem" name="tester@invivodata" password="test" />
+    </DialUp>
+    <GPRS>
+      <Card name="Windows Mobile Broadband" apn="m2mdata"/>
+    </GPRS>
+    <Bluetooth>
+      <Device name="myglucohealth" password="0000"/>
+    </Bluetooth>
+  </DataTransfer>
+  <Studies>
+    <Study name="TrainingEY7050Staging" start="en-US" >
+      <SupportedLanguages>
+        <Language id="en-US">
+          <ScriptName>EY7050_SITEpro_enUS</ScriptName>
+          <ScriptImageName>EY7050_SITEpro_enUS</ScriptImageName>
+          <DisplayName>Lang Not Present SDF not present</DisplayName>
+        </Language>
+        <Language id="de-KE">
+          <ScriptName>EY7050_SITEpro_deKE</ScriptName>
+          <ScriptImageName>EY7050_SITEpro_deKE</ScriptImageName>
+          <DisplayName>Lang Present SDF present</DisplayName>
+        </Language>
+        <Language id="es-US">
+          <ScriptName>EY7050_SITEpro_esUS</ScriptName>
+          <ScriptImageName>EY7050_SITEpro_esUS</ScriptImageName>
+          <DisplayName>Lang Present SDF not present XXX</DisplayName>
+        </Language>
+        <Language id="fa-KE">
+          <ScriptName>EY7050_SITEpro_faKE</ScriptName>
+          <ScriptImageName>EY7050_SITEpro_faKE</ScriptImageName>
+          <DisplayName>Lang Not Present SDF present</DisplayName>
+        </Language>
+        <Language id="ge-KE">
+          <ScriptName>EY7050_SITEpro_geKE</ScriptName>
+          <ScriptImageName>EY7050_SITEpro_deKE</ScriptImageName>
+          <DisplayName>Lang Present SDF mismatch XXX</DisplayName>
+        </Language>
+        <Language id="he-KE">
+          <ScriptName>EY7050_SITEpro_heKE</ScriptName>
+          <ScriptImageName>EY7050_SITEpro_deKE</ScriptImageName>
+          <DisplayName>Lang Not Present SDF mismatch</DisplayName>
+        </Language>
+        <Language id="ie-KE">
+          <ScriptName>EY7050_SITEpro_ieKE</ScriptName>
+          <DisplayName>Lang Present SDF untagged XXX</DisplayName>
+        </Language>
+        <Language id="je-KE">
+          <ScriptName>EY7050_SITEpro_jeKE</ScriptName>
+          <DisplayName>Lang Not Present SDF untagged</DisplayName>
+        </Language>
+        <Language id="ke-KE">
+          <ScriptName>EY7050_SITEpro_keKE</ScriptName>
+          <ScriptImageMap>Map</ScriptImageMap>
+          <DisplayName>Lang Present Image Map Present</DisplayName>
+        </Language>
+        <Language id="le-KE">
+          <ScriptName>EY7050_SITEpro_leKE</ScriptName>
+          <ScriptImageMap>NoMap</ScriptImageMap>
+          <DisplayName>Lang Present Image Map Not Present XXX</DisplayName>
+        </Language>
+        <Language id="me-KE">
+          <ScriptName>EY7050_SITEpro_meKE</ScriptName>
+          <ScriptImageMap>NoMap</ScriptImageMap>
+          <DisplayName>Lang Not Present Image Map Not Present</DisplayName>
+        </Language>
+      </SupportedLanguages>
+    </Study>
+  </Studies>
+  <CoreSettings>
+    <CoreSetting name="CriticalBatteryLevel" value="9"/>
+    <CoreSetting name="LowBatteryLevel" value="32"/>
+    <!-- Connection Manager to use. Values: WIN8, CL900, J3400, J3500 -->
+    <CoreSetting name="ConnectionManager" value="invivodata.Interop.ConnectionManagers,invivodata.Interop.ConnectionManagers.Win8" />
+    <!-- Connection type to use at startup. Values: WMBN, GOBI, DUN, ROUTER, ETHERNET" -->
+    <CoreSetting name="DefaultConnectionType" value="WMBN" />
+    <CoreSetting name="ServerUri" value="https://EPROSyncval2.ert.com/EPROSync/EPROSync"/>
+    <CoreSetting name="UseEXPeRT" value="0" />
+  </CoreSettings>
+  <UserAccountsFile name="UserAccounts"/>
+</Settings>

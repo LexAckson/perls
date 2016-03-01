@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 #ePSC Validator
 #Alex Jackson July 2014
 #Checks an eProStudyConfig.xml for the following:
@@ -52,7 +53,7 @@ $iso = &_slurp ("$Bin/ISO Country and Language Codes.csv");
 #prepare the output file
 (my $version) = $epro =~ /Version>(.*)<\/Version>/i;
 chomp ($version);
-my $outfile = $version . "_VaildationSummary.csv";
+my $outfile = "ePSCVaildationSummary_" . $version . ".csv";
 open (my $fh, '>', $outfile);
 
 #extract scripts
@@ -64,27 +65,27 @@ $path =~ s/\//\\/g;
 #call the cryptonite batch decomp decrypt
 system( $path, $work );
 #the decrypted files should have this extension
-my $workSuffix = ".xml.epsctmp";
+my $workSuffix = ".epsctmp";
 
 #		1	Output ePSC version
 print $fh $version ? "Version,$version\n" : "Version Not Found\n";
 
 #		2	Output ISP login and password
-print $fh "Account Login,";
-(my $login) = $epro =~ /Account.*name="(.*)"\spas/i,"\n";
-print $fh $login ? "$login\n" : "Account Name Not Found\n";
+# print $fh "Account Login,";
+# (my $login) = $epro =~ /Account.*name="(.*)"\spas/i,"\n";
+# print $fh $login ? "$login\n" : "Account Name Not Found\n";
 
-print $fh "Account Password,";
-(my $pass) = $epro =~ /"\spassword="(.*)"/;
-print $fh $pass ? "$pass\n" : "Account Password Not Found\n";
+# print $fh "Account Password,";
+# (my $pass) = $epro =~ /"\spassword="(.*)"/;
+# print $fh $pass ? "$pass\n" : "Account Password Not Found\n";
 
-#		3	Verify ISP password is login backwards
-#remove domain from login and compare
-chomp($pass);
-$login =~ s/@.*$//;
-chomp($login);
-unless ($login eq scalar reverse $pass){print $fh ",Password Mismatch!!!";}
-print $fh "\n\n";
+		# 3	Verify ISP password is login backwards
+# remove domain from login and compare
+# chomp($pass);
+# $login =~ s/@.*$//;
+# chomp($login);
+# unless ($login eq scalar reverse $pass){print $fh ",Password Mismatch!!!";}
+#print $fh "\n\n";
 
 #		4	For each study list the name and display if applicable
 # to grab all the things @ary = $str =~ m/(stuff)/g;
@@ -97,6 +98,7 @@ print $fh "\n\n";
 $order = 0;
 my @lid;
 my @sname;
+my $snameExists;
 my @sver;
 my @dname;
 my @bmap;
@@ -116,7 +118,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 {
 	if ($1){print $fh "Study Name,$1\n";}
 	if ($2){print $fh "Display Name,$2";}
-	if ($10){print $fh "\n[[Study Languages]]\nDisplay Name,Language ID,Script Name,Script Version,Script Image,Image Map,Warning(s)\n";}
+	if ($10){print $fh "\n[[Study Languages]]\nDisplay Name,Language ID,Script Name,Script Version,Warning(s)\n";}
 	if ($3)
 	{
 		@lid[$order] = $3;
@@ -131,12 +133,17 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 	if ($4)# script name and version
 	{
 		@sname[$order] = $4;
-		if (my $sfh = File::ReadBackwards->new(@sname[$order] . $workSuffix))
+		#see if our file exists
+		$snameExists = (-e "@sname[$order].xml" or -e "@sname[$order].xml" . $workSuffix);
+
+		#try the decrypted version
+		my $sfh = File::ReadBackwards->new(@sname[$order] . ".xml" . $workSuffix);
+		#try the never encrypted version
+		unless($sfh){$sfh = File::ReadBackwards->new(@sname[$order] . ".xml")}
+		
+		if($sfh)
 		{
-			until (@sver[$order] =~ /^#V\s/ )
-			{
-				@sver[$order] = $sfh->readline;
-			}
+			until (@sver[$order] =~ /^#V\s/ ){@sver[$order] = $sfh->readline;}
 			chomp (@sver[$order]);
 			@sver[$order] =~ s/#V\s//;
 			$sfh->close;
@@ -161,14 +168,19 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 	{
 		@bmap[$order] = $6;
 #		14	make sure the bitmap file is present
-		unless(-e "@bmap[$order].sdf")
-		{$error = $error . "Script Image Error - ";}
+#			ths sname should be populated from an earlier iteration
+		unless(-e "@bmap[$order].sdf" or not $snameExists)
+		{$error = $error . "Script Image File Missing - ";}
+#		make sure the language name matches the sdf name
+		if(-e "@bmap[$order].sdf" and $snameExists 
+		and ("@bmap[$order]" ne "@sname[$order]"))
+		{$error = $error . "Script Image Mismatch - ";}
 	}
 	if ($7)
 	{
 		@imap[$order] = $7;
 #		15	make sure every image map file listed is present
-		unless (-e "@imap[$order].xml")
+		unless (-e "@imap[$order].xml" or not $snameExists)
 		{$error = $error . "Missing Image Map - ";}
 	}
 	if ($8)#end of language, print all lang nodes
@@ -178,7 +190,8 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 		{
 			foreach (glob("*.sdf"))
 			{
-				if(/@sname[$order]/){$error = $error . "Script Image Error - ";}
+				if(/@sname[$order]/ and $snameExists)
+				{$error = $error . "Script Image Tag Missing - ";}
 			};
 		}
 #			Printing!
@@ -191,9 +204,9 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 #		11	Output version of the script
 		print $fh @sver[$order] ? ",@sver[$order]" : ",None";
 #		12	Output bitmap if applicable
-		print $fh @bmap[$order] ? ",@bmap[$order]" : ",None";
+#		print $fh @bmap[$order] ? ",@bmap[$order]" : ",None";
 #		13	Output image map if applicable
-		print $fh @imap[$order] ? ",@imap[$order]" : ",None";
+#		print $fh @imap[$order] ? ",@imap[$order]" : ",None";
 #			Output warning messages
 		print $fh $error ? ",$error" : ",None";
 		print $fh "\n";
