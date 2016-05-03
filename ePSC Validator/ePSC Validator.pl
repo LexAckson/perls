@@ -25,7 +25,9 @@
 #To install PP with strawberry perl, use the cpan manager to install PAR
 #then use these commands:
 #cpan> look PAR::Packer
-#H:\straw5.16\cpan\build\PAR-Packer-1.014-lqy0Qe>perl Makefile.PL
+##prompt should change to something like,
+##H:\straw5.16\cpan\build\PAR-Packer-1.014-lqy0Qe>
+#perl Makefile.PL
 #dmake -f Makefile install
 #******************************
 #User the perl command line to compile.
