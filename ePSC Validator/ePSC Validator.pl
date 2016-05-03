@@ -28,8 +28,9 @@
 #H:\straw5.16\cpan\build\PAR-Packer-1.014-lqy0Qe>perl Makefile.PL
 #dmake -f Makefile install
 #******************************
-#The command for pp isindex
-#C:\Users\alex.jackson\Documents\perls\ePSC Validator>pp -o ePSCValidator.exe -M File::ReadBackwards "ePSC Validator.pl"
+#User the perl command line to compile.
+#The command for pp is:
+#C:\Users\alex.jackson\Documents\perls\ePSC Validator>pp.bat -o ePSCValidator.exe -M File::ReadBackwards "ePSC Validator.pl"
 
 
 use File::ReadBackwards;
@@ -154,14 +155,14 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 		@dname[$order] = $5;
 #		6	Verify format and spelling for display name (country - lang)
 		my ($country, $lang) = @dname[$order] =~ /(.*)\s-\s(.*)/;
-		if ($iso !~ /$country/ or $iso !~ /$lang/)
+		if ($iso !~ /\,$country\n/ or $iso !~ /,$lang\n/)
 		{$error = $error . "DisplayName Spelling - ";}
 #		7	Verify order of display name (alpha)
 		if ($order >= 1 && @dname[$order] le @dname[$order - 1])
 		{$error = $error . "DisplayName Out of Order - ";}
 #		8	Verify language ID matches the display name
 		my ($lg, $ct) = @lid[$order] =~ /(\w\w)-(\w\w)/;
-		if ($iso !~ /$ct,$country/ or $iso !~ /$lg,$lang/)
+		if ($iso !~ /\b$ct,$country\n/ or $iso !~ /\b$lg,$lang\n/)
 		{$error = $error . "Language ID Invalid - ";}
 	}
 	if ($6) #bitmap
