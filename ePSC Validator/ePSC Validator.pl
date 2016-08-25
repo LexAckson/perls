@@ -246,7 +246,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 close $fh;
 #commented out to test if cryptonite is working
 unlink glob "\*$workSuffix";
-exec($outfile);
+system("start " . $outfile);
 
 #reads file into memory
 sub _slurp
