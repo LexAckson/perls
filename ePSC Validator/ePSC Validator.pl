@@ -2,6 +2,7 @@
 #ePSC Validator
 #Alex Jackson July 2014
 #Checks an eProStudyConfig.xml for the following:
+#Note! these numbers are not related to FRS req
 #		1	Output ePSC version
 #		2	Output ISP login and password
 #		3	Verify ISP password is login backwards
@@ -19,6 +20,9 @@
 #		14	make sure the bitmap file is present
 #		15	no bitmaps files are in the package without listing in epsc
 #		16	make sure every image map file listed is present
+#		17	The file is for the BM170 or HD2 devices and there is a Langauge
+#			entry with the translation code 'ar' or 'he' that does not have the 
+#			tag '<NativeRTL>True</NativeRTL>' under the Language
 
 #packaging notes
 #
@@ -106,6 +110,7 @@ my @sver;
 my @dname;
 my @bmap;
 my @imap;
+my @nRTL;
 my $error;
 while ($epro =~ /<Study\sname="(.*?)"						#1	study
 				|displayname="(.*?)"						#2	display
@@ -114,14 +119,15 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 				|<DisplayName>(.*)<\/DisplayName>			#5	@dname
 				|<ScriptImageName>(.*)<\/ScriptImageName>	#6	@bmap
 				|<ScriptImageMap>(.*)<\/ScriptImageMap>		#7	@imap
-				|(<\/language>)								#8	end of lang
-				|(<\/study>)								#9	end study
-				|(<SupportedLanguages>)						#10	start langs list
+				|<NativeRTL>(.*)<\/NativeRTL>				#8	@nRTL
+				|(<\/language>)								#9	end of lang
+				|(<\/study>)								#10	end study
+				|(<SupportedLanguages>)						#11	start langs list
 				/xgi)
 {
 	if ($1){print $fh "Study Name,$1\n";}
 	if ($2){print $fh "Display Name,$2";}
-	if ($10){print $fh "\n[[Study Languages]]\nDisplay Name,Language ID,Script Name,Script Version,Warning(s)\n";}
+	if ($11){print $fh "\n[[Study Languages]]\nDisplay Name,Language ID,Script Name,Script Version,Warning(s)\n";}
 	if ($3)
 	{
 		@lid[$order] = $3;
@@ -186,7 +192,12 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 		unless (-e "@imap[$order].xml" or not $snameExists)
 		{$error = $error . "Missing Image Map - ";}
 	}
-	if ($8)#end of language, print all lang nodes
+#		17	Verify that ar and he langs on PIDION or HD2 will also have the NativeRTL set to true
+	if ($8)
+	{
+		@nRTL[$order] = $8;
+	}
+	if ($9)#end of language, print all lang nodes
 	{
 #		15	no bitmaps files are in the package without listing in epsc
 		unless(length @bmap[$order])
@@ -196,6 +207,14 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 				if(/@sname[$order]/ and $snameExists)
 				{$error = $error . "Script Image Tag Missing - ";}
 			};
+		}
+#		17	Verify that ar and he langs on PIDION or HD2 will also have the NativeRTL set to true
+		if (@lid[$order] =~ /^ar|he/ and $epro =~ /<Device\sname="PIDION"|<Device\sname="HD2"/)
+		{
+			unless (@nRTL[$order] =~ /true/)
+			{
+				$error = $error . "RtoL Tag Missing - ";
+			}
 		}
 #			Printing!
 #		5	Output display name
@@ -216,7 +235,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 		$error = "";
 		$order++;
 	}
-	if ($9) #end of study
+	if ($10) #end of study
 	{
 		$order = 0;
 		(@lid,@sname,@sver,@dname,@bmap,@imap) = ();
