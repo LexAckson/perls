@@ -60,7 +60,7 @@ $iso = &_slurp ("$Bin/ISO Country and Language Codes.csv");
 #prepare the output file
 (my $version) = $epro =~ /Version>(.*)<\/Version>/i;
 chomp ($version);
-my $outfile = "ePSCVaildationSummary_" . $version . ".csv";
+my $outfile = "ePSCValidationSummary_" . $version . ".csv";
 open (my $fh, '>', $outfile);
 
 #extract scripts
@@ -125,7 +125,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 				|(<SupportedLanguages>)						#11	start langs list
 				/xgi)
 {
-	if ($1){print $fh "Study Name,$1\n";}
+	if ($1){print $fh "\nStudy Name,$1\n";}
 	if ($2){print $fh "Display Name,$2";}
 	if ($11){print $fh "\n[[Study Languages]]\nDisplay Name,Language ID,Script Name,Script Version,Warning(s)\n";}
 	if ($3)
@@ -189,7 +189,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 	{
 		@imap[$order] = $7;
 #		15	make sure every image map file listed is present
-		unless (-e "@imap[$order].xml" or not $snameExists)
+		unless (-e "@imap[$order].xml")
 		{$error = $error . "Missing Image Map - ";}
 	}
 #		17	Verify that ar and he langs on PIDION or HD2 will also have the NativeRTL set to true
@@ -239,7 +239,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 	{
 		$order = 0;
 		(@lid,@sname,@sver,@dname,@bmap,@imap) = ();
-		print $fh "\n";
+		print $fh "";
 	}
 }
 #cleanup
