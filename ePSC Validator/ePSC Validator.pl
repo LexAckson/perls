@@ -189,7 +189,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 	{
 		@imap[$order] = $7;
 #		15	make sure every image map file listed is present
-		unless (-e "@imap[$order].xml")
+		unless (-e "@imap[$order].xml" or not $snameExists)
 		{$error = $error . "Missing Image Map - ";}
 	}
 #		17	Verify that ar and he langs on PIDION or HD2 will also have the NativeRTL set to true
