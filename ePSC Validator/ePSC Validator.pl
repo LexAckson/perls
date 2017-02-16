@@ -170,7 +170,7 @@ while ($epro =~ /<Study\sname="(.*?)"						#1	study
 		if ($order >= 1 && @dname[$order] le @dname[$order - 1])
 		{$error = $error . "DisplayName Out of Order - ";}
 #		8	Verify language ID matches the display name
-		if ($iso !~ /\b$ct,$country\n/ or $iso !~ /\b$lg,$lang\n/)
+		if ($iso !~ /\b$ct,$country\n/ or $iso !~ /\b$lg,$lang\n/ or not $ct or not $lg)
 		{$error = $error . "Language ID Invalid - ";}
 	}
 	if ($6) #bitmap
